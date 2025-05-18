@@ -1,6 +1,0 @@
-fulcio:
-  fulcioURL: "https://fulcio.sigstore.dev"
-  oidcMode: "staticToken"
-  oidcIssuerURL: "${ACTIONS_ID_TOKEN_REQUEST_URL}"
-  oidcIDToken: "${ACTIONS_ID_TOKEN_REQUEST_TOKEN}"
-rekorURL: "https://rekor.sigstore.dev"
