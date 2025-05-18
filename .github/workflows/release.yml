@@ -18,15 +18,17 @@ jobs:
           persist-credentials: false
 
       - name: Build container
-        run: docker buildx build . -f Containerfile -t "ghcr.io/mcpherrinm/image-signing-test:${{ github.ref_name }}"
+        run: podman build . -f Containerfile -t "ghcr.io/mcpherrinm/image-signing-test:$REF"
+        env:
+          ref: ${{ github.ref_name }}
 
       - name: Login to ghcr.io
-        run: printenv GITHUB_TOKEN | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+        run: printenv GITHUB_TOKEN | podman login ghcr.io --username "$USER" --password-stdin
         env:
+          USER: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push container
-        run: docker push "ghcr.io/mcpherrinm/image-signing-test:${{ github.ref_name }}"
-
-      - name: Sign it
-        run: cosign sign --yes "ghcr.io/mcpherrinm/image-signing-test:${{ github.ref_name }}"
+        run: podman push "ghcr.io/mcpherrinm/image-signing-test:$REF"
+        env:
+          ref: ${{ github.ref_name }}
