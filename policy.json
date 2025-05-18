@@ -1,0 +1,23 @@
+{
+  "default": [
+    {
+      "type": "reject"
+    }
+  ],
+  "transports": {
+    "docker": {
+      "ghcr.io/mcpherrinm/image-signing-test": [
+        {
+          "type": "sigstoreSigned",
+          "fulcio": {
+            "caPath": "/etc/pki/containers/fulcio.crt",
+            "oidcIssuer": "https://token.actions.githubusercontent.com",
+            "subjectEmail": "https://github.com/mcpherrinm/image-signing-test/.github/workflows/build-image.yaml@refs/heads/main"
+          },
+          "rekorPublicKeyData": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE2G2Y+2tabdTV5BcGiBIx0a9fAFwrkBbmLSGtks4L3qX6yYY0zufBnhC8Ur/iy55GhWP/9A/bY2LhC30M9+RYtw==",
+          "signedIdentity": { "type": "matchExact" }
+        }
+      ]
+    }
+  }
+}
