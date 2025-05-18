@@ -31,6 +31,10 @@ jobs:
       - name: Template OIDC
         run: envsubst < containers-sigstore-signing-params.yaml > "$RUNNER_TEMP/sign.yaml"
 
+      # This is a hack, but skopeo uses unpriv userns for containers-storage: I guess
+      - name: Disable apparmor user namespace restrictions
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
       - name: Push container
         run: skopeo copy --sign-by-sigstore "$RUNNER_TEMP/sign.yaml" "containers-storage:ghcr.io/mcpherrinm/image-signing-test:$REF" "docker://ghcr.io/mcpherrinm/image-signing-test:$REF"
         env:
