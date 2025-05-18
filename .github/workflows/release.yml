@@ -23,7 +23,7 @@ jobs:
           REF: ${{ github.ref_name }}
 
       - name: Login to ghcr.io
-        run: printenv GITHUB_TOKEN | podman login ghcr.io --username "$USER" --password-stdin
+        run: printenv GITHUB_TOKEN | skopeo login ghcr.io --username "$USER" --password-stdin
         env:
           USER: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -32,6 +32,6 @@ jobs:
         run: envsubst < containers-sigstore-signing-params.yaml > "$RUNNER_TEMP/sign.yaml"
 
       - name: Push container
-        run: podman push --sign-by-sigstore "$RUNNER_TEMP/sign.yaml" "ghcr.io/mcpherrinm/image-signing-test:$REF"
+        run: skopeo copy --sign-by-sigstore "$RUNNER_TEMP/sign.yaml" "containers-storage:ghcr.io/mcpherrinm/image-signing-test:$REF" "docker://ghcr.io/mcpherrinm/image-signing-test:$REF"
         env:
           REF: ${{ github.ref_name }}
