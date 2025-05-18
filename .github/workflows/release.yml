@@ -27,3 +27,6 @@ jobs:
 
       - name: Push container
         run: docker push "ghcr.io/mcpherrinm/image-signing-test:${{ github.ref_name }}"
+
+      - name: Sign it
+        run: cosign sign --yes "ghcr.io/mcpherrinm/image-signing-test:${{ github.ref_name }}"
