@@ -32,3 +32,10 @@ jobs:
         run: podman push "ghcr.io/mcpherrinm/image-signing-test:$REF"
         env:
           REF: ${{ github.ref_name }}
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3.8.2
+
+      - run: cosign sign --yes "ghcr.io/mcpherrinm/image-signing-test:$REF"
+        env:
+          REF: ${{ github.ref_name }}
