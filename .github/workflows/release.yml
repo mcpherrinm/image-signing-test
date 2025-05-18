@@ -28,7 +28,10 @@ jobs:
           USER: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Template OIDC
+        run: envsubst < containers-sigstore-signing-params.yaml > "$RUNNER_TEMP/sign.yaml"
+
       - name: Push container
-        run: podman push "ghcr.io/mcpherrinm/image-signing-test:$REF"
+        run: podman push --sign-by-sigstore "$RUNNER_TEMP/sign.yaml" "ghcr.io/mcpherrinm/image-signing-test:$REF"
         env:
           REF: ${{ github.ref_name }}
