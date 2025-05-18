@@ -36,4 +36,4 @@ jobs:
       - name: Install cosign
         uses: sigstore/cosign-installer@v3.8.2
 
-      - run: cosign sign --yes "ghcr.io/mcpherrinm/image-signing-test:$(cat $RUNNER_TEMP/image-digest)"
+      - run: cosign sign --yes "ghcr.io/mcpherrinm/image-signing-test@$(cat $RUNNER_TEMP/image-digest)"
