@@ -1,0 +1,6 @@
+default-docker:
+  use-sigstore-attachments: true
+
+docker:
+    ghcr.io/mcpherrinm/image-signing-test:
+        use-sigstore-attachments: true
