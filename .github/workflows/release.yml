@@ -29,13 +29,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push container
-        run: podman push "ghcr.io/mcpherrinm/image-signing-test:$REF"
+        run: podman push "ghcr.io/mcpherrinm/image-signing-test:$REF" --digestfile "$RUNNER_TEMP/image-digest"
         env:
           REF: ${{ github.ref_name }}
 
       - name: Install cosign
         uses: sigstore/cosign-installer@v3.8.2
 
-      - run: cosign sign --yes "ghcr.io/mcpherrinm/image-signing-test:$REF"
-        env:
-          REF: ${{ github.ref_name }}
+      - run: cosign sign --yes "ghcr.io/mcpherrinm/image-signing-test:$(cat $RUNNER_TEMP/image-digest)"
