@@ -1,0 +1,29 @@
+# Build and push a container
+# Based on Boulder's release.yml
+name: Build Release
+on:
+  push:
+    tags:
+      - release-*
+jobs:
+  push-release:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      packages: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Build container
+        run: docker buildx build . -f Containerfile -t "ghcr.io/mcpherrinm/image-signing-test:${{ github.ref_name }}"
+
+      - name: Login to ghcr.io
+        run: printenv GITHUB_TOKEN | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push container
+        run: docker push "ghcr.io/mcpherrinm/image-signing-test:${{ github.ref_name }}"
