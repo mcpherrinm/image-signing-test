@@ -23,7 +23,7 @@ jobs:
           REF: ${{ github.ref_name }}
 
       - name: Login to ghcr.io
-        run: printenv GITHUB_TOKEN | podman login ghcr.io --username "$USER" --password-stdin
+        run: printenv GITHUB_TOKEN | podman login ghcr.io --username "$USER" --password-stdin --authfile "$HOME/.docker/config.json"
         env:
           USER: ${{ github.actor }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
